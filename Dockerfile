@@ -4,8 +4,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-# if app has a build step (vite/react)
-RUN npm run build
 
 # production stage — serve built assets with lightweight server
 FROM node:18-alpine
