@@ -1,16 +1,29 @@
-# build stage
+# Stage 1: Build
 FROM node:18-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci --silent
-COPY . .
-#RUN npm run build   # adjust if build output is `build` or `dist`
 
-# runtime stage
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install --silent
+
+# Copy the rest of the source code
+COPY . .
+
+# Build the app
+RUN npm run build
+
+# Stage 2: Serve
 FROM node:18-alpine
 WORKDIR /app
-ENV PORT=3000
+
+# Install a simple server to serve the built files
 RUN npm install -g serve
-COPY --from=builder /app/dist /app/dist   # change /dist to /build if needed
+
+# Copy build output from builder
+COPY --from=builder /app/dist ./dist
+
+# Expose port 3000
 EXPOSE 3000
+
+# Start the app
 CMD ["serve", "-s", "dist", "-l", "3000"]
