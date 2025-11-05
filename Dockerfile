@@ -10,7 +10,7 @@ RUN npm install --silent
 COPY . .
 
 # Build the app
-RUN npm run build
+#RUN npm run build
 
 # Stage 2: Serve
 FROM node:18-alpine
