@@ -1,15 +1,16 @@
-# Stage 1: Build
+# build stage
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci --silent
 COPY . .
-#RUN npm run build
+#RUN npm run build   # adjust if build output is `build` or `dist`
 
-# Stage 2: Serve
+# runtime stage
 FROM node:18-alpine
 WORKDIR /app
+ENV PORT=3000
 RUN npm install -g serve
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/dist /app/dist   # change /dist to /build if needed
 EXPOSE 3000
 CMD ["serve", "-s", "dist", "-l", "3000"]
