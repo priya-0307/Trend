@@ -2,17 +2,17 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --silent
+RUN npm ci
 COPY . .
+# if app has a build step (vite/react)
 RUN npm run build
 
-
-# runtime stage
+# production stage — serve built assets with lightweight server
 FROM node:18-alpine
 WORKDIR /app
+# install serve or use a minimal static server; here using serve
+RUN npm i -g serve
+COPY --from=builder /app/dist ./dist
 ENV PORT=3000
-# serve using a simple static server
-RUN npm install -g serve
-COPY --from=builder /app/dist /app/dist
 EXPOSE 3000
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["sh", "-c", "serve -s dist -l 3000"]
