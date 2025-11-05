@@ -1,20 +1,15 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18-alpine
-
-# Set the working directory
+# Stage 1: Build
+FROM node:18-alpine AS builder
 WORKDIR /app
-
-# Copy package.json and package-lock.json (or yarn.lock)
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
-
-# Copy the rest of the application code
 COPY . .
+RUN npm run build
 
-# Expose the port the React app runs on
+# Stage 2: Serve
+FROM node:18-alpine
+WORKDIR /app
+RUN npm install -g serve
+COPY --from=builder /app/dist ./dist
 EXPOSE 3000
-
-# Command to start the React development server
-CMD ["npm", "start"]
+CMD ["serve", "-s", "dist", "-l", "3000"]
