@@ -1,13 +1,20 @@
-FROM nginx:alpine
+# Use lightweight Node.js image
+FROM node:20-alpine
 
-# Remove default Nginx content
-RUN rm -rf /usr/share/nginx/html/*
+# Set working directory inside the container
+WORKDIR /app
 
-# Copy prebuilt dist folder
-COPY app/dist/ /usr/share/nginx/html/
+# Install 'serve' globally to serve static files
+RUN npm install -g serve
 
-# Expose port 3000
+# Copy your built React app (dist folder) into the container
+COPY dist/ ./dist
+
+# Set environment variable for the port
+ENV PORT=3000
+
+# Expose port 3000 to the outside
 EXPOSE 3000
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the app using serve
+CMD ["serve", "-s", "dist", "-l", "3000"]
