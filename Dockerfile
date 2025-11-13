@@ -4,7 +4,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy prebuilt dist folder
-COPY dist/ /usr/share/nginx/html/
+COPY app/dist/ /usr/share/nginx/html/
 
 # Expose port 3000
 EXPOSE 3000
