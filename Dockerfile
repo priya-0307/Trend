@@ -5,7 +5,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+# RUN npm run build
 
 # Stage 2: runtime
 FROM node:18-alpine AS runner
