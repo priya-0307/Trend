@@ -1,15 +1,14 @@
-
-FROM node:20-alpine AS builder
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-# RUN npm run build
-
-
+# Use Nginx to serve static files
 FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Remove default Nginx content
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy prebuilt dist folder
+COPY dist/ /usr/share/nginx/html/
+
+# Expose port 3000
 EXPOSE 3000
+
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
