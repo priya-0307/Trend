@@ -5,11 +5,9 @@ WORKDIR /app
 
 # Copy only necessary files
 COPY package*.json ./
-COPY vite.config.* ./
-COPY index.html ./
-COPY src ./src
 
-RUN npm install && npm run build
+
+# RUN npm install && npm run build
 
 # Serve with Nginx
 FROM nginx:alpine
