@@ -11,7 +11,7 @@ COPY . .
 FROM node:18-alpine AS runner
 WORKDIR /app
 RUN npm i -g serve
-COPY --from=builder /app/build ./build
+COPY --from=builder /app/dist ./dist
 EXPOSE 3000
 # serve static build on port 3000
 CMD ["serve", "-s", "build", "-l", "3000"]
