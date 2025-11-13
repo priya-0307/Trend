@@ -1,16 +1,14 @@
-# build stage
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
- 
-# production stage — serve built assets with lightweight server
-FROM node:20-alpine
-WORKDIR /app
-# install serve or use a minimal static server; here using serve
-RUN npm i -g serve
-COPY --from=builder /app/dist ./dist
-ENV PORT=3000
+# Use Nginx to serve static files
+FROM nginx:alpine
+
+# Remove default Nginx content
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy prebuilt dist folder
+COPY dist/ /usr/share/nginx/html/
+
+# Expose port 3000
 EXPOSE 3000
-CMD ["sh", "-c", "serve -s dist -l 3000"]
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
