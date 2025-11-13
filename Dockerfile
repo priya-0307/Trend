@@ -4,7 +4,7 @@ FROM nginx:alpine
 # Remove default Nginx content
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy prebuilt dist folder
+# Copy prebuilt dist folder into Nginx
 COPY dist/ /usr/share/nginx/html/
 
 # Expose port 3000
