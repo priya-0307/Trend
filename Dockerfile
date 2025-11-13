@@ -1,14 +1,17 @@
-# Use Nginx to serve static files
-FROM nginx:alpine
+# Use Node.js lightweight image
+FROM node:18-alpine
 
-# Remove default Nginx content
-RUN rm -rf /usr/share/nginx/html/*
+# Set working directory
+WORKDIR /app
 
-# Copy prebuilt dist folder into Nginx
-COPY dist/ /usr/share/nginx/html/
+# Copy package.json and install serve globally
+RUN npm install -g serve
+
+# Copy prebuilt dist folder
+COPY dist/ ./dist
 
 # Expose port 3000
 EXPOSE 3000
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Serve the app
+CMD ["serve", "-s", "dist", "-l", "3000"]
