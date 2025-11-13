@@ -8,7 +8,7 @@ WORKDIR /app
 RUN npm install -g serve
 
 # Copy prebuilt dist folder
-COPY dist/ ./dist
+COPY dist/ 
 
 # Expose port 3000
 EXPOSE 3000
