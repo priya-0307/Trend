@@ -1,13 +1,17 @@
-# Stage 1: Build React app
-FROM node:20-alpine AS builder
+# Stage 1: build
+FROM node:18-alpine AS builder
 WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
 COPY package*.json ./
-# RUN npm install
+RUN npm ci
 COPY . .
-# RUN npm run build
+RUN npm run build
 
-# Stage 2: Serve with nginx
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Stage 2: runtime
+FROM node:18-alpine AS runner
+WORKDIR /app
+RUN npm i -g serve
+COPY --from=builder /app/build ./build
 EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+# serve static build on port 3000
+CMD ["serve", "-s", "build", "-l", "3000"]
