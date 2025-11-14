@@ -14,7 +14,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'npm install'
-        sh 'npx react-scripts build'
+        
       }
     }
     stage('Docker Build') {
