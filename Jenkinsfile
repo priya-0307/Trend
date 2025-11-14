@@ -30,19 +30,6 @@ pipeline {
         }
       }
     }
-   stage('Deploy to K8s') {
-     steps {
-       withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'KUBECONF')]) {
-         sh '''
-           mkdir -p tmp-kube
-           cp $KUBECONF tmp-kube/config
-           export KUBECONFIG=$(pwd)/tmp-kube/config
-         '''
-         sh 'kubectl apply -f deployment.yaml'
-         sh "kubectl set image deployment/trend-app trend=${IMAGE}:${TAG} --record"
-      }
-    }
-  }
-
+ 
   }
 }
