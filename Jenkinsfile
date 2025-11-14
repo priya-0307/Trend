@@ -32,7 +32,7 @@ pipeline {
     }
    stage('Deploy to K8s') {
      steps {
-       withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONF')]) {
+       withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'KUBECONF')]) {
          sh '''
            mkdir -p $HOME/.kube
            cp $KUBECONF $HOME/.kube/config
