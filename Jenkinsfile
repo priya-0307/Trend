@@ -32,7 +32,7 @@ pipeline {
     }
     stage('Deploy to K8s') {
       steps {
-        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+        withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'KUBECONFIG')]) {
           sh 'mkdir -p ~/.kube'
           sh 'cp $KUBECONFIG ~/.kube/config'
           sh 'kubectl apply -f k8s/deployment.yaml'
