@@ -35,7 +35,7 @@ pipeline {
         withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'KUBECONFIG')]) {
           sh 'mkdir -p ~/.kube'
           sh 'cp $KUBECONFIG ~/.kube/config'
-          sh 'kubectl apply -f k8s/deployment.yaml'
+          sh 'kubectl apply -f deployment.yaml'
           sh "kubectl set image deployment/trend-app trend=${IMAGE}:${TAG} --record"
         }
       }
