@@ -6,7 +6,11 @@ pipeline {
     TAG  = "latest"
   }
   stages {
-    stage('Checkout') { steps { checkout scm } }
+    stage('Checkout') {
+      steps {
+        checkout scm 
+      }
+    }
     stage('Build') {
       steps {
         sh 'npm ci'
