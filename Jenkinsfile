@@ -2,7 +2,8 @@ pipeline {
   agent any
   environment {
     DOCKERHUB = 'priyadharshini030722'
-    IMAGE = "${DOCKERHUB}/trend:${env.GIT_COMMIT.substring(0,7)}"
+    IMAGE = "priyadharshini030722/trend-app"
+    TAG  = "latest"
   }
   stages {
     stage('Checkout') { steps { checkout scm } }
