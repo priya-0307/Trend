@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     DOCKERHUB = 'priyadharshini030722'
-    IMAGE = "priyadharshini030722/trend-app"
+    IMAGE = "${DOCKERHUB}/trend-app"
     TAG  = "latest"
   }
   stages {
@@ -13,30 +13,30 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'npm ci'
-        sh 'npm run build'
+        sh 'npm install'
+        sh 'npx react-scripts build'
       }
     }
     stage('Docker Build') {
       steps {
-        sh "docker build -t ${IMAGE} ."
+        sh "docker build -t ${IMAGE}:${TAG} ."
       }
     }
-    stage('Push') {
+    stage('Push to DockerHub') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
           sh 'echo $PASS | docker login -u $USER --password-stdin'
-          sh "docker push ${IMAGE}"
+          sh "docker push ${IMAGE}:${TAG}"
         }
       }
     }
     stage('Deploy to K8s') {
       steps {
-        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONF')]) {
+        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
           sh 'mkdir -p ~/.kube'
-          sh 'cp $KUBECONF ~/.kube/config'
-          // Use kubectl set image or apply yaml
-          sh "kubectl set image deployment/trend-app trend=${IMAGE} --record || kubectl apply -f k8s/deployment.yaml"
+          sh 'cp $KUBECONFIG ~/.kube/config'
+          sh 'kubectl apply -f k8s/deployment.yaml'
+          sh "kubectl set image deployment/trend-app trend=${IMAGE}:${TAG} --record"
         }
       }
     }
