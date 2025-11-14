@@ -38,7 +38,7 @@ pipeline {
            cp $KUBECONF tmp-kube/config
            export KUBECONFIG=$(pwd)/tmp-kube/config
          '''
-         sh 'kubectl apply -f k8s/deployment.yaml'
+         sh 'kubectl apply -f deployment.yaml'
          sh "kubectl set image deployment/trend-app trend=${IMAGE}:${TAG} --record"
       }
     }
