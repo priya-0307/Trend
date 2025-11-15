@@ -30,6 +30,19 @@ pipeline {
         }
       }
     }
+    
+    stage('Deploy to K8s') {
+      steps {
+        // write kubeconfig to a temp file using the secret-file credential
+        withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'kkkkk.txt')]) {
+          sh '''
+            export KUBECONFIG=${kkkkk.txt}
+            kubectl set image deployment/trend-app trend=${IMAGE}:${SHORT_COMMIT} --record --namespace default
+            kubectl rollout status deployment/trend-app --namespace default
+          '''
+        }
+      }
+    }
  
   }
 }
