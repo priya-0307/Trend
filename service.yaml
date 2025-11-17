@@ -1,15 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: trend-1b
-  namespace: default
-  labels:
-    app: trend
+  name: trend-lb
 spec:
   type: LoadBalancer
   selector:
     app: trend
   ports:
-    - protocol: TCP
-      port: 80         # Port exposed via LoadBalancer
-      targetPort: 3000 # Port on your pods
+    - port: 80
+      targetPort: 3000
