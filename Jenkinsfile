@@ -4,6 +4,7 @@ pipeline {
     DOCKERHUB = 'priyadharshini030722'
     IMAGE = "${DOCKERHUB}/trend-app"
     TAG  = "latest"
+    KUBECONFIG = credentials('kubeconfig-id')  
   }
   stages {
     stage('Checkout') {
@@ -31,15 +32,18 @@ pipeline {
       }
     }
     
-    stage('Deploy to K8s') {
-      steps {
-        // write kubeconfig to a temp file using the secret-file credential
-        withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'KUBECONFIG_FILE')]) {
-          sh '''
-            export KUBECONFIG=${KUBECONFIG_FILE}
-            kubectl set image deployment/trend-app trend=${IMAGE}:${SHORT_COMMIT} --record --namespace default
-            kubectl rollout status deployment/trend-app --namespace default
-          '''
+    stage('Deploy to Kubernetes') {
+            steps {
+                withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
+                    sh """
+                    sed -i 's#IMAGE_TAG#${IMAGE_TAG}#g' deployment.yaml
+                    sed -i 's#DOCKER_REPO#${DOCKERHUB_REPO}#g' deployment.yaml
+                    
+                    kubectl apply -f deployment.yaml
+                    kubectl apply -f service.yaml
+
+                    kubectl rollout status deployment/trend-app-deployment
+                    """
         }
       }
     }
