@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: trend
-        image: priyadharshini030722/trend:latest
+        image: priyadharshini030722/trend-app:latest
         ports: [{ containerPort: 3000 }]
         readinessProbe:
           httpGet: { path: "/", port: 3000 }
