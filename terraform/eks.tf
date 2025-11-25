@@ -11,7 +11,7 @@
 
       eks_managed_node_group_defaults = {
         ami            = "ami-02b8269d5e85954ef"
-        instance_types = "t2.micro"
+        instance_types = "t2.medium"
       }
 
       eks_managed_node_groups = {
