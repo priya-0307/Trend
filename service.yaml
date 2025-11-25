@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: trend-lb
+  name: trend-apps
 spec:
   type: LoadBalancer
   selector:
