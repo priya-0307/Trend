@@ -5,4 +5,5 @@ resource "aws_instance" "jenkins" {
   tags = {
     Name = "my-project-2"
   }
+
 }
