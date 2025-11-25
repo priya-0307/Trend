@@ -14,13 +14,16 @@ Ensure Node.js dependencies are installed:
 --> npm start
 
 Docker (Run Locally)
+
 Dockerize the application by creating a Dockerfile.
 --> docker build -t trend-app:latest .
+
 Run Docker container:
 --> docker run -p 3000:3000 trend-app:latest
 
 
 Terraform
+
 Infrastructure as Code setup using main.tf to provision:
 
 VPC, subnets, internet gateway
@@ -34,8 +37,10 @@ Provision infrastructure:
 --> terraform init
 --> terraform plan
 --> terraform apply
+
 Kubernetes (EKS)
 Setup AWS EKS cluster:
+
 --> aws eks create-cluster --name my-eks-cluster --region ap-south-1 --kubernetes-version 1.27
 Configure kubeconfig:
 
@@ -53,6 +58,7 @@ kubectl get pods
 kubectl get svc 
 
 Jenkins CI/CD
+
 Install Jenkins and required plugins:
 
 Docker, Git, Kubernetes, Pipeline
